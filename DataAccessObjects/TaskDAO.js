@@ -22,10 +22,10 @@ class TaskDAO{
         return await task.findAll({
             where: {
                 StartDate: {
-                    $gte: startDate, 
+                    $lte: startDate, 
                 },
                 EndDate: {
-                    $lte: endDate, 
+                    $gte: endDate, 
                 },
             },
         });
