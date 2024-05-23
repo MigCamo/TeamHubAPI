@@ -43,12 +43,20 @@ const deleteTask = async (req, res = response) => {
 }
 
 const getAllTaskCompleteByProject = async (req, res = response) => {
-    
+    try {
+
+        const taskList = await taskDAO.getAllTasks();
+        res.json(taskList);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error });
+    }
+
 }
 
 const getAllTaskByDate = async (req, res = response) => {
     const {StartDate, EndDate } = req.body;
-    console.log(StartDate, EndDate);
     try {
         const taskList = await taskDAO.findTasksByDate(StartDate, EndDate);
         res.json(taskList);
@@ -63,5 +71,6 @@ module.exports = {
     createTask,
     getAllTaskByDate,
     updateTask,
-    deleteTask
+    deleteTask,
+    getAllTaskCompleteByProject
 };

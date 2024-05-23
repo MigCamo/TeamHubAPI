@@ -4,13 +4,15 @@ const {
     createTask,
     getAllTaskByDate,
     updateTask,
-    deleteTask 
+    deleteTask,
+    getAllTaskCompleteByProject
 } = require('../Controller/TaskController');
 
 const router = Router();
 
 router.post('/', createTask);
-router.post('/get', getAllTaskByDate);
+router.get('/get', getAllTaskByDate);
+router.get('/getAll', getAllTaskCompleteByProject);
 router.post('/up', updateTask);
 router.delete('/:Name', deleteTask);
 

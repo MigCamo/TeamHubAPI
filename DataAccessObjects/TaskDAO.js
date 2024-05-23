@@ -19,14 +19,11 @@ class TaskDAO{
     }
 
     static async findTasksByDate(startDate, endDate) {
+        console.log(startDate, endDate);
         return await tasks.findAll({
             where: {
-                StartDate: {
-                    $lte: startDate, 
-                },
-                EndDate: {
-                    $gte: endDate, 
-                },
+                StartDate: startDate,
+                EndDate: endDate, 
             },
         });
     }
