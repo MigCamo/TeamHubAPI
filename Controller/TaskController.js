@@ -48,6 +48,7 @@ const getAllTaskCompleteByProject = async (req, res = response) => {
 
 const getAllTaskByDate = async (req, res = response) => {
     const {StartDate, EndDate } = req.body;
+    console.log(StartDate, EndDate);
     try {
         const taskList = await taskDAO.findTasksByDate(StartDate, EndDate);
         res.json(taskList);

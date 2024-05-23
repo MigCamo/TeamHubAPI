@@ -1,9 +1,9 @@
-const { task } = require('../Models/Index');
+const { tasks } = require('../Models/Index');
 
 class TaskDAO{
 
     static async createNewTask(taskAux) {
-        const existingTask = await task.findOne({
+        const existingTask = await tasks.findOne({
             where: { Name: taskAux.Name } 
         });
 
@@ -11,15 +11,15 @@ class TaskDAO{
             return { message: 'La actividad ya está registrada en la base de datos.' };
         }
 
-        return await task.create(taskAux);
+        return await tasks.create(taskAux);
     }
 
     static async getAllTasks(){
-        return await task.findAll();
+        return await tasks.findAll();
     }
 
     static async findTasksByDate(startDate, endDate) {
-        return await task.findAll({
+        return await tasks.findAll({
             where: {
                 StartDate: {
                     $lte: startDate, 
@@ -32,7 +32,7 @@ class TaskDAO{
     }
 
     static async updateTaskByName(name, taskNew) {
-        const result = await task.update(taskNew, {
+        const result = await tasks.update(taskNew, {
             where: { Name: name }, 
         });
 
@@ -46,7 +46,7 @@ class TaskDAO{
     }
 
     static async deleteTaskByName(name) {
-        return await task.destroy({ where: { name } });
+        return await tasks.destroy({ where: { name } });
     }
 }
 
