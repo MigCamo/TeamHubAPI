@@ -1,53 +1,72 @@
-const { task } = require('../Models/Index');
+const { where } = require("sequelize");
+const { tasks } = require("../Models/Index");
+class TaskDAO {
+  
+  static async createNewTask(taskAux) {
+    const existingTask = await tasks.findOne({
+      where: { Name: taskAux.Name },
+    });
 
-class TaskDAO{
-
-    static async createNewTask(taskAux) {
-        const existingTask = await task.findOne({
-            where: { Name: taskAux.Name } 
-        });
-
-        if (existingTask) {
-            return { message: 'La actividad ya está registrada en la base de datos.' };
-        }
-
-        return await task.create(taskAux);
+    if (existingTask) {
+      return {
+        message: "La actividad ya está registrada en la base de datos.",
+      };
     }
 
-    static async getAllTasks(){
-        return await task.findAll();
+    return await tasks.create(taskAux);
+  }
+
+  static async getAllTasks() {
+    return await tasks.findAll();
+  }
+
+  static async getAllProjectTasks(idProject) {
+    return await tasks.findAll({
+      where: {
+        IdProject: idProject,
+      },
+    });
+  }
+
+  static async findTasksByDate(startDate, endDate) {
+    console.log(startDate, endDate);
+    return await tasks.findAll({
+      where: {
+        StartDate: startDate,
+        EndDate: endDate,
+      },
+    });
+  }
+
+  static async updateTaskByID(taskNew) {
+    try {
+      const result = await tasks.update(taskNew, {
+        where: { IdTask: taskNew.IdTask },
+      });
+  
+      const [affectedCount] = result;
+  
+      if (affectedCount === 0) {
+        return {
+          message: "No se encontró ninguna tarea con ese ID para actualizar.",
+        };
+      }
+  
+      return {
+        message: "La tarea se actualizó con éxito.",
+        affectedCount,
+      };
+    } catch (error) {
+      return {
+        message: "Ocurrió un error al intentar actualizar la tarea.",
+        error: error.message,
+      };
     }
-
-    static async findTasksByDate(startDate, endDate) {
-        return await task.findAll({
-            where: {
-                StartDate: {
-                    $lte: startDate, 
-                },
-                EndDate: {
-                    $gte: endDate, 
-                },
-            },
-        });
-    }
-
-    static async updateTaskByName(name, taskNew) {
-        const result = await task.update(taskNew, {
-            where: { Name: name }, 
-        });
-
-        const [affectedCount] = result;
-
-        if (affectedCount === 0) {
-            return { message: 'No se encontró ninguna tarea con ese nombre para actualizar.' };
-        }
-
-        return { message: 'La tarea se actualizó con éxito.', affectedCount }; 
-    }
-
-    static async deleteTaskByName(name) {
-        return await task.destroy({ where: { name } });
-    }
+  }
+  
+  static async deleteTaskByName(name) {
+    return await tasks.destroy({ where: { name } });
+  }
 }
 
 module.exports = TaskDAO;

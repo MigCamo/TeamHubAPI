@@ -22,6 +22,10 @@ module.exports = function(sequelize, DataTypes) {
     EndDate: {
       type: DataTypes.DATEONLY,
       allowNull: true
+    },
+    Status: {
+      type: DataTypes.STRING(90),
+      allowNull: true
     }
   }, {
     sequelize,

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('document', {
-    IdDocument: {
+  return sequelize.define('tasks', {
+    IdTask: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -11,29 +11,33 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: true
     },
-    Path: {
+    Description: {
       type: DataTypes.STRING(250),
       allowNull: true
     },
-    Extension: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'extension',
-        key: 'IdExtension'
-      }
+    StartDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    EndDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
     },
     IdProject: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'project',
         key: 'IdProject'
       }
+    },
+    Status: {
+      type: DataTypes.STRING(90),
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'document',
+    tableName: 'tasks',
     timestamps: false,
     indexes: [
       {
@@ -41,18 +45,11 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "IdDocument" },
+          { name: "IdTask" },
         ]
       },
       {
-        name: "document_extension_idx",
-        using: "BTREE",
-        fields: [
-          { name: "Extension" },
-        ]
-      },
-      {
-        name: "document_project_idx",
+        name: "task_project_idx",
         using: "BTREE",
         fields: [
           { name: "IdProject" },
